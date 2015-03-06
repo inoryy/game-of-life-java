@@ -11,7 +11,7 @@ public class Board {
      */
     public Board(int size, double p) {
         grid = new Cell[size][size];
-        // TODO: initialize Cells with p alive probability
+        // TODO: initialize Cells with p alive probability.
     }
 
     public Cell[][] getGrid() {
