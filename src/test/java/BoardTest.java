@@ -9,10 +9,10 @@ public class BoardTest {
         //Board b = new Board(3, 3, 0.0);
         
         Cell[][] cells = {
-                {new Cell(true), new Cell(true), new Cell(true)}, 
-                {new Cell(true), new Cell(true), new Cell(true)}, 
-                {new Cell(true), new Cell(true), new Cell(true)}
-            };
+            {new Cell(true), new Cell(true), new Cell(true)}, 
+            {new Cell(true), new Cell(true), new Cell(true)}, 
+            {new Cell(true), new Cell(true), new Cell(true)}
+        };
         Board b = new Board(cells);
 
         assertEquals(3, b.neighboursCountAt(0,0));
