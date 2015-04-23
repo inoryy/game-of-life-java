@@ -1,3 +1,4 @@
+package ee.ut.oop.gof.core;
 
 public class Cell {
     private boolean state = false;

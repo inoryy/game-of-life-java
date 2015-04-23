@@ -1,3 +1,5 @@
+package ee.ut.oop.gof.core;
+
 public class Board {
     private Cell[][] grid;
     private int height=3; //bottom right pos: grid[height-1][width-1]

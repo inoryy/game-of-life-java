@@ -2,6 +2,10 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
+import ee.ut.oop.gof.core.Board;
+import ee.ut.oop.gof.core.Cell;
+import ee.ut.oop.gof.core.DisplayDriver;
+
 public class Display {
     public static DisplayDriver getDriver() {
         DisplayDriver driver;

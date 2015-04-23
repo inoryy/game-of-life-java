@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+import ee.ut.oop.gof.core.Board;
+import ee.ut.oop.gof.core.DisplayDriver;
+
 public class GameOfLife {
 
     public static void main(String[] args) throws Exception {
