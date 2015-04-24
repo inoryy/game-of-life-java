@@ -9,12 +9,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.oop.gof.gui.Controller">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
    <children>
       <FlowPane fx:id="base" prefHeight="400.0" prefWidth="387.0">
-         <children>
-            <CheckBox fx:id="abc" mnemonicParsing="false" text="CheckBox" />
-         </children></FlowPane>
+         <HBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </HBox.margin></FlowPane>
       <VBox prefHeight="400.0" prefWidth="216.0">
          <effect>
             <InnerShadow />
@@ -33,7 +33,7 @@
                   <VBox prefHeight="63.0" prefWidth="216.0">
                      <children>
                         <Label text="Cell count" />
-                        <Slider onDragDetected="#onDragDetected" />
+                        <Slider />
                      </children>
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
@@ -62,7 +62,8 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
                 <Button fx:id="runButton" mnemonicParsing="false" onAction="#onRun" text="Run" />
-                  <Button mnemonicParsing="false" text="Stop" />
+                  <Button mnemonicParsing="false" onAction="#onStop" text="Stop" />
+                  <Button mnemonicParsing="false" onAction="#onRandomize" text="Randomize" />
               </items>
             </ToolBar>
          </children>

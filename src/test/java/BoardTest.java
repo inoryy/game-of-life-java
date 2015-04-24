@@ -2,8 +2,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import ee.ut.oop.gof.core.Board;
-import ee.ut.oop.gof.core.Cell;
+import gof.core.Board;
+import gof.core.Cell;
 
 public class BoardTest {
    

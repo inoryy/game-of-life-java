@@ -1,4 +1,4 @@
-package ee.ut.oop.gof.core;
+package gof.core;
 
 public class Board {
     private Cell[][] grid;

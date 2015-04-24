@@ -1,4 +1,4 @@
-package ee.ut.oop.gof.gui;
+package gof.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
