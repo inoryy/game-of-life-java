@@ -1,4 +1,8 @@
+package gof.console;
 import java.util.Scanner;
+
+import gof.core.Board;
+import gof.core.DisplayDriver;
 
 public class GameOfLife {
 

@@ -1,5 +1,8 @@
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import gof.core.Cell;
 
 public class CellTest {
 

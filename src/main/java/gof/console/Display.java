@@ -1,6 +1,11 @@
+package gof.console;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+
+import gof.core.Board;
+import gof.core.Cell;
+import gof.core.DisplayDriver;
 
 public class Display {
     public static DisplayDriver getDriver() {
@@ -10,7 +15,7 @@ public class Display {
             driver = new EclipseDriver();
         } catch (AWTException e) {
             // TODO: implement a better fall-back
-            driver = new NullDriver();
+            driver = new ConsoleDriver();
         }
         
         return driver;
@@ -18,7 +23,7 @@ public class Display {
     
     private Display() {}
 
-    private static class EclipseDriver implements DisplayDriver {
+    private static class EclipseDriver extends ConsoleDriver {
         private Robot eclipse;
         
         public EclipseDriver() throws AWTException {
@@ -27,22 +32,7 @@ public class Display {
         
         public void displayBoard(Board board) {
             cleanConsole();
-            Cell[][] grid = board.getGrid();
-            
-            String border = String.format("+%0" + 2*grid.length + "d+", 0).replace("0","-");
-            
-            System.out.println(border);
-            
-            for (Cell[] row : grid) {
-                String r = "|";
-                for (Cell c : row) {
-                    r += c.getState() ? "* " : "  ";
-                }
-                r += "|";
-                System.out.println(r);
-            }
-            
-            System.out.println(border);
+            super.displayBoard(board);
         }
         
         private void cleanConsole() {
@@ -53,13 +43,5 @@ public class Display {
             eclipse.keyPress(KeyEvent.VK_R);
             eclipse.keyRelease(KeyEvent.VK_R);
         }
-    }
-    
-    private static class NullDriver implements DisplayDriver {
-
-        public void displayBoard(Board board) {
-            System.out.println("Game of Life");
-        }
-        
     }
 }

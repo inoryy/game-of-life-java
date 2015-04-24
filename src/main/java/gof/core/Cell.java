@@ -1,3 +1,4 @@
+package gof.core;
 
 public class Cell {
     private boolean state = false;
