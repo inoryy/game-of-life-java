@@ -15,58 +15,126 @@
          <HBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </HBox.margin></FlowPane>
-      <VBox prefHeight="400.0" prefWidth="216.0">
-         <effect>
-            <InnerShadow />
-         </effect>
+      <VBox fx:id="sidebar" prefHeight="400.0" prefWidth="216.0">
          <children>
             <TextFlow prefHeight="80.0" prefWidth="216.0">
                <opaqueInsets>
                   <Insets top="20.0" />
                </opaqueInsets>
                <children>
-                  <Label text="GOF" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="80.0" prefWidth="196.0" text="Game of Life" textAlignment="CENTER">
+                     <font>
+                        <Font size="29.0" />
+                     </font></Label>
                </children>
             </TextFlow>
-            <VBox prefHeight="301.0" prefWidth="216.0">
+            <VBox prefHeight="208.0" prefWidth="195.0">
                <children>
-                  <VBox prefHeight="63.0" prefWidth="216.0">
+                  <VBox prefHeight="39.0" prefWidth="195.0">
                      <children>
-                        <Label text="Cell count" />
-                        <Slider />
+                        <VBox prefHeight="33.0" prefWidth="195.0">
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Cell density: " />
+                                    <Label fx:id="countLabel" text="Label" />
+                                 </children>
+                              </HBox>
+                              <Slider fx:id="countSlider" snapToTicks="true" />
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <Separator opacity="0.0" prefWidth="200.0" />
+                  <VBox prefHeight="49.0" prefWidth="195.0">
                      <children>
-                        <Button mnemonicParsing="false" text="&lt;" />
-                        <Pane prefHeight="161.0" prefWidth="162.0" />
-                        <Button mnemonicParsing="false" text="&gt;" />
-                     </children>
-                  </HBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Board dimensions" />
+                        <Label prefHeight="24.0" prefWidth="126.0" text="Board dimensions:" />
                         <HBox prefHeight="27.0" prefWidth="216.0">
                            <children>
-                              <Label text="Height" />
-                              <TextField prefHeight="25.0" prefWidth="40.0" />
-                              <Separator orientation="VERTICAL" prefHeight="200.0" />
-                              <Label text="Width" />
-                              <TextField prefHeight="25.0" prefWidth="38.0" />
+                              <Label prefHeight="24.0" prefWidth="34.0" text="Rows: " />
+                              <TextField fx:id="rowsField" prefHeight="25.0" prefWidth="30.0" />
+                              <Label contentDisplay="CENTER" prefHeight="24.0" prefWidth="59.0" text="  Columns: " />
+                              <TextField fx:id="colsField" prefHeight="25.0" prefWidth="30.0" />
+                              <Button fx:id="setButton" mnemonicParsing="false" onAction="#onSet" text="Set">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
                         </HBox>
                      </children>
                   </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Separator prefHeight="16.0" prefWidth="195.0" />
+                        <Label prefHeight="27.0" prefWidth="79.0" text="Choose preset:">
+                           <opaqueInsets>
+                              <Insets top="10.0" />
+                           </opaqueInsets>
+                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <BorderPane prefHeight="77.0" prefWidth="27.0">
+                                 <center>
+                                    <Button fx:id="leftButton" mnemonicParsing="false" onAction="#onLeft" prefHeight="25.0" prefWidth="44.0" text="&lt;" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </BorderPane>
+                              <Pane fx:id="presetBox" prefHeight="100.0" prefWidth="136.0" />
+                              <BorderPane prefHeight="77.0" prefWidth="29.0">
+                                 <center>
+                                    <Button fx:id="rightButton" mnemonicParsing="false" onAction="#onRight" text="&gt;" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Separator opacity="0.0" prefHeight="13.0" prefWidth="195.0" />
                </children>
             </VBox>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
-              <items>
-                <Button fx:id="runButton" mnemonicParsing="false" onAction="#onRun" text="Run" />
-                  <Button mnemonicParsing="false" onAction="#onStop" text="Stop" />
-                  <Button mnemonicParsing="false" onAction="#onRandomize" text="Randomize" />
-              </items>
-            </ToolBar>
+            <VBox prefHeight="61.0" prefWidth="195.0">
+               <children>
+                  <Separator prefHeight="7.0" prefWidth="195.0" />
+                  <Label text="Save or load board:" />
+                  <BorderPane prefHeight="8.0" prefWidth="195.0">
+                     <right>
+                        <FlowPane prefHeight="35.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="openButton" mnemonicParsing="false" onAction="#onOpen" text="Open">
+                                 <opaqueInsets>
+                                    <Insets right="10.0" />
+                                 </opaqueInsets>
+                              </Button>
+                              <Separator opacity="0.0" orientation="VERTICAL" prefHeight="35.0" prefWidth="13.0" />
+                              <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSave" text="Save">
+                                 <opaqueInsets>
+                                    <Insets left="10.0" />
+                                 </opaqueInsets>
+                              </Button>
+                           </children>
+                        </FlowPane>
+                     </right>
+                  </BorderPane>
+               </children>
+            </VBox>
+            <BorderPane prefHeight="39.0" prefWidth="195.0">
+               <left>
+                <Button fx:id="runButton" mnemonicParsing="false" onAction="#onRun" prefHeight="25.0" prefWidth="49.0" text="Run" BorderPane.alignment="CENTER" />
+               </left>
+               <center>
+                  <Button fx:id="stopButton" disable="true" mnemonicParsing="false" onAction="#onStop" prefHeight="25.0" prefWidth="48.0" text="Stop" BorderPane.alignment="CENTER" />
+               </center>
+               <right>
+                  <Button fx:id="randomizeButton" mnemonicParsing="false" onAction="#onRandomize" text="Randomize" BorderPane.alignment="CENTER" />
+               </right>
+               <top>
+                  <Separator prefHeight="14.0" prefWidth="195.0" BorderPane.alignment="CENTER" />
+               </top>
+            </BorderPane>
          </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
       </VBox>
    </children>
 </HBox>
