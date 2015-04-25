@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
    <children>
       <FlowPane fx:id="base" prefHeight="400.0" prefWidth="387.0">
          <HBox.margin>
@@ -117,6 +117,20 @@
                   </BorderPane>
                </children>
             </VBox>
+            <BorderPane prefHeight="33.0" prefWidth="195.0">
+               <center>
+                  <Button fx:id="randomizeButton" mnemonicParsing="false" onAction="#onRandomize" text="Randomize" BorderPane.alignment="CENTER" />
+               </center>
+               <right>
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClear" text="Clear" BorderPane.alignment="CENTER" />
+               </right>
+               <top>
+                  <Separator prefWidth="200.0" BorderPane.alignment="CENTER" />
+               </top>
+               <left>
+                  <Label text="Board:" BorderPane.alignment="CENTER" />
+               </left>
+            </BorderPane>
             <BorderPane prefHeight="39.0" prefWidth="195.0">
                <left>
                 <Button fx:id="runButton" mnemonicParsing="false" onAction="#onRun" prefHeight="25.0" prefWidth="49.0" text="Run" BorderPane.alignment="CENTER" />
@@ -124,12 +138,12 @@
                <center>
                   <Button fx:id="stopButton" disable="true" mnemonicParsing="false" onAction="#onStop" prefHeight="25.0" prefWidth="48.0" text="Stop" BorderPane.alignment="CENTER" />
                </center>
-               <right>
-                  <Button fx:id="randomizeButton" mnemonicParsing="false" onAction="#onRandomize" text="Randomize" BorderPane.alignment="CENTER" />
-               </right>
                <top>
                   <Separator prefHeight="14.0" prefWidth="195.0" BorderPane.alignment="CENTER" />
                </top>
+               <right>
+                  <Button fx:id="aboutButton" mnemonicParsing="false" onAction="#onAbout" text="About" BorderPane.alignment="CENTER" />
+               </right>
             </BorderPane>
          </children>
          <padding>
