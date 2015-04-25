@@ -175,12 +175,11 @@ public class Controller implements Initializable {
                        state = false;
                    }
                    g[i][j].setNewState(state);
+                   g[i][j].updateState();
                    pos++;
                }
            }
-           
-           // UPDATE, COMMIT NEW STATE
-           
+                     
            board = new Board(g);
 
            display = new JavaFXDisplayDriver(10, 30, board);
