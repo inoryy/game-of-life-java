@@ -21,7 +21,24 @@ public class JavaFXDisplayDriver implements DisplayDriver {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
             	Color c = g[i][j].getState() ? Color.STEELBLUE : Color.WHITE;
-                tilePane.getChildren().add(new Rectangle(cellSizePx, cellSizePx, c));
+            	Rectangle r = new Rectangle(cellSizePx, cellSizePx, c);
+                tilePane.getChildren().add(r);
+                int ii = i;
+                int jj = j;
+                boolean newState = g[i][j].getState() ? false : true;
+                r.setOnMousePressed(event -> {
+                    r.setFill(Color.GRAY);
+                    
+                });
+                
+                r.setOnMouseClicked(event -> {
+                    r.setFill(g[ii][jj].getState() ? Color.WHITE : Color.STEELBLUE);
+                    g[ii][jj].setNewState(newState);
+                    g[ii][jj].updateState();
+                    
+                });
+                
+
             }
         }
     }

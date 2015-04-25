@@ -77,11 +77,12 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	createBoard(10, 10, 0.3);
+    	//todo: get and set presets
     }
 
     @FXML
     private void onRandomize(Event evt) {
-    	createBoard(10, 10, 0.3);
+    	createBoard(10, 10, (double)countSlider.getValue()/100);
     }
     
     @FXML
@@ -160,6 +161,7 @@ public class Controller implements Initializable {
                input+=line;
                rows++;
            }
+           s.close();
            
            int pos = 0;
            createBoard(rows,cols,0);
@@ -239,21 +241,19 @@ public class Controller implements Initializable {
         System.out.println("action not set");
     }
     
-    @FXML // REMOVE THIS METHOD AND USE LISTENER(?)
+    @FXML
     private void onSlide(Event evt) {
-        System.out.println("action not set");
+        countSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                countLabel.setText(newValue.intValue()+"%");
+                createBoard(10, 10, (double)newValue.intValue()/100);
+            }
+        });
     }
     
-    /* BROKEN SLIDER LISTENER, NEEDS FIX
-    countSlider.valueProperty().addListener(new ChangeListener<Number>() {
-        @Override
-        public void changed(ObservableValue<? extends Number> observable,
-                Number oldValue, Number newValue) {
-            countLabel.setText(newValue.intValue()+"%");
-            createBoard(10, 10, newValue.intValue()/100);
-        }
-    });
-    */
+
     private void createBoard(int rows, int cols, double prob) {
         //board = new Board(10, 10, 0.3);
         board = new Board(rows, cols, prob);

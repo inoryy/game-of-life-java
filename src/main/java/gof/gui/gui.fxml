@@ -37,10 +37,10 @@
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
                                     <Label text="Cell density: " />
-                                    <Label fx:id="countLabel" text="Label" />
+                                    <Label fx:id="countLabel" text="30%" />
                                  </children>
                               </HBox>
-                              <Slider fx:id="countSlider" snapToTicks="true" />
+                              <Slider fx:id="countSlider" onDragDetected="#onSlide" onDragDone="#onSlide" onDragDropped="#onSlide" onDragEntered="#onSlide" onDragExited="#onSlide" onDragOver="#onSlide" onMouseDragEntered="#onSlide" onMouseDragExited="#onSlide" onMouseDragOver="#onSlide" onMouseDragReleased="#onSlide" value="30.0" />
                            </children>
                         </VBox>
                      </children>
