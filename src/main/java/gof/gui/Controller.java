@@ -4,50 +4,53 @@ import gof.console.ConsoleDriver;
 import gof.core.Board;
 import gof.core.Cell;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 public class Controller implements Initializable {
     
@@ -64,12 +67,9 @@ public class Controller implements Initializable {
     private TextField colsField;
     @FXML
     private Button setButton;
+    
     @FXML
-    private Button leftButton;
-    @FXML
-    private Button rightButton;
-    @FXML
-    private Pane presetBox = new Pane();
+    private HBox presetBox = new HBox();
     @FXML
     private Button openButton;
     @FXML
@@ -90,11 +90,89 @@ public class Controller implements Initializable {
     
     private Timeline loop = null;
     
+    private Pagination presetsPagination;
+    static String[] presets;
+    int presetCount = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	createBoard(10, 10, 0.3);
-    	//todo: get and set presets
+        // PRESETS //
+        File dir = new File("Presets");
+        File[] selectedFiles = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.getName().endsWith(".gofb")){
+                    presetCount++;
+                    return true;}
+                return false;
+            }
+        });
+        int pr = 0;
+        presets = new String[presetCount];
+        for (File selectedFile : selectedFiles) {
+            presets[pr] = selectedFile.getName().substring(0, selectedFile.getName().length() - 5);
+            pr++;
+        }
+
+        presetsPagination = new Pagination(presets.length, 0);
+        //pagination.setStyle("-fx-border-color:red;");
+        presetsPagination.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer pageIndex) {
+                if (pageIndex >= presets.length) {
+                    return null;
+                } else {
+                    return createPresetPage(pageIndex);
+                }
+            }
+        });
+ 
+        AnchorPane anchor = new AnchorPane();
+        AnchorPane.setTopAnchor(presetsPagination, 10.0);
+        AnchorPane.setRightAnchor(presetsPagination, 10.0);
+        AnchorPane.setBottomAnchor(presetsPagination, 10.0);
+        AnchorPane.setLeftAnchor(presetsPagination, 10.0);
+        anchor.getChildren().addAll(presetsPagination);
+        presetBox.getChildren().add(anchor);
+        // END PRESETS //
+        
+        createBoard(10, 10, 0.3);
     	
+    }
+    
+    public VBox createPresetPage(int pageIndex) {
+        VBox box = new VBox(5);
+        for (int i = pageIndex; i < pageIndex + 1; i++) {
+            TextArea text = new TextArea(presets[i]);
+            text.setWrapText(true);
+            String presetName = Character.toUpperCase(presets[i].charAt(0)) + presets[i].substring(1);
+            Label l = new Label(presetName);
+            Button openPresetButton = new Button("Open");
+            int ii = i;
+            openPresetButton.setOnAction(event -> openPreset(presets[ii]));
+            HBox nameAndOpen = new HBox(5);
+            nameAndOpen.getChildren().addAll(l,openPresetButton);
+            File f1 = new File("Presets/"+presets[i]+".png");
+            if(f1.exists() && !f1.isDirectory()) { 
+                Image myPreset = new Image("file:Presets/"+presets[i]+".png");
+                ImageView myPresetView = new ImageView();
+                myPresetView.setImage(myPreset);
+                box.getChildren().add(myPresetView);
+            } else {
+                File f = new File("Presets/nopreview.png");
+                if(f.exists() && !f.isDirectory()) { 
+                    Image noprevImg = new Image("file:Presets/nopreview.png"); //new Image("Presets/nopreview.png");
+                    ImageView noprev = new ImageView();
+                    noprev.setImage(noprevImg);
+                    box.getChildren().add(noprev);
+                } else {
+                    System.out.println("nopreview.png not found");
+                }
+            }
+            
+            
+            box.getChildren().add(nameAndOpen);
+        }
+        return box;
     }
 
     @FXML
@@ -109,8 +187,6 @@ public class Controller implements Initializable {
         rowsField.setDisable(true);
         colsField.setDisable(true);
         setButton.setDisable(true);
-        leftButton.setDisable(true);
-        rightButton.setDisable(true);
         presetBox.setDisable(true);
         openButton.setDisable(true);
         saveButton.setDisable(true);
@@ -137,13 +213,12 @@ public class Controller implements Initializable {
         rowsField.setDisable(false);
         colsField.setDisable(false);
         setButton.setDisable(false);
-        leftButton.setDisable(false);
-        rightButton.setDisable(false);
         presetBox.setDisable(false);
         openButton.setDisable(false);
         saveButton.setDisable(false);
         runButton.setDisable(false);
         randomizeButton.setDisable(false);
+        clearButton.setDisable(false);
         stopButton.setDisable(true);
         /////////// END OF DISABLE/ENABLE BLOCK ///////////
     	loop.stop();
@@ -247,17 +322,7 @@ public class Controller implements Initializable {
             }
         }
     }
-    
-    
-    @FXML
-    private void onLeft(Event evt) {
-        System.out.println("action not set");
-    }
-    
-    @FXML
-    private void onRight(Event evt) {
-        System.out.println("action not set");
-    }
+
     
     @FXML
     private void onSlide(Event evt) {
@@ -312,7 +377,55 @@ public class Controller implements Initializable {
         // END WINDOW //
     }
     
+    private void openPreset(String presetName) {
+       
+       File selectedFile = new File ("Presets/"+presetName+".gofb");   
+       try {
+           Scanner s = new Scanner(selectedFile);
+           int rows = 0;
+           int cols = 0;
+           String input = "";
+           while(s.hasNextLine()){
+               String line = s.nextLine();
+               if (cols == 0){
+                   cols = line.length();
+               }
+               line.replaceAll("\\s+","");
+               input+=line;
+               rows++;
+           }
+           s.close();
+           
+           int pos = 0;
+           createBoard(rows,cols,0);
+           Cell[][] g = board.getGrid();
+           for (int i = 0; i < g.length; i++) {
+               for (int j = 0; j < g[0].length; j++) {
+                   char c = input.charAt(pos);
+                   //boolean state = (int) c == 1 ? true : false;
+                   boolean state;
+                   if (c =='1'){
+                       state = true;
+                   } else {
+                       state = false;
+                   }
+                   g[i][j].setNewState(state);
+                   g[i][j].updateState();
+                   pos++;
+               }
+           }
+                     
+           board = new Board(g);
 
+           display = new JavaFXDisplayDriver(10, 30, board);
+
+           base.getChildren().clear();
+           base.getChildren().add(new Group(display.getPane()));
+           //createBoard(rows,cols, 0);
+       } catch (FileNotFoundException e) {
+           e.printStackTrace();
+       }       
+    }
     
     private void createBoard(int rows, int cols, double prob) {
         //board = new Board(10, 10, 0.3);

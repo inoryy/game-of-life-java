@@ -9,28 +9,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="497.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
    <children>
       <FlowPane fx:id="base" prefHeight="400.0" prefWidth="387.0">
          <HBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </HBox.margin></FlowPane>
-      <VBox fx:id="sidebar" prefHeight="400.0" prefWidth="216.0">
+      <VBox fx:id="sidebar" prefHeight="477.0" prefWidth="218.0">
          <children>
-            <TextFlow prefHeight="80.0" prefWidth="216.0">
+            <TextFlow prefHeight="59.0" prefWidth="195.0">
                <opaqueInsets>
                   <Insets top="20.0" />
                </opaqueInsets>
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="80.0" prefWidth="196.0" text="Game of Life" textAlignment="CENTER">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="66.0" prefWidth="196.0" text="Game of Life" textAlignment="CENTER">
                      <font>
                         <Font size="29.0" />
-                     </font></Label>
+                     </font>
+                     <effect>
+                        <Glow level="0.26">
+                           <input>
+                              <Bloom />
+                           </input>
+                        </Glow>
+                     </effect></Label>
                </children>
             </TextFlow>
-            <VBox prefHeight="208.0" prefWidth="195.0">
+            <VBox prefHeight="275.0" prefWidth="197.0">
                <children>
-                  <VBox prefHeight="39.0" prefWidth="195.0">
+                  <VBox prefHeight="27.0" prefWidth="189.0">
                      <children>
                         <VBox prefHeight="33.0" prefWidth="195.0">
                            <children>
@@ -46,10 +53,10 @@
                      </children>
                   </VBox>
                   <Separator opacity="0.0" prefWidth="200.0" />
-                  <VBox prefHeight="49.0" prefWidth="195.0">
+                  <VBox prefHeight="50.0" prefWidth="189.0">
                      <children>
                         <Label prefHeight="24.0" prefWidth="126.0" text="Board dimensions:" />
-                        <HBox prefHeight="27.0" prefWidth="216.0">
+                        <HBox prefHeight="36.0" prefWidth="196.0">
                            <children>
                               <Label prefHeight="24.0" prefWidth="34.0" text="Rows: " />
                               <TextField fx:id="rowsField" prefHeight="25.0" prefWidth="30.0" />
@@ -64,7 +71,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="162.0" prefWidth="195.0">
                      <children>
                         <Separator prefHeight="16.0" prefWidth="195.0" />
                         <Label prefHeight="27.0" prefWidth="79.0" text="Choose preset:">
@@ -72,21 +79,7 @@
                               <Insets top="10.0" />
                            </opaqueInsets>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <BorderPane prefHeight="77.0" prefWidth="27.0">
-                                 <center>
-                                    <Button fx:id="leftButton" mnemonicParsing="false" onAction="#onLeft" prefHeight="25.0" prefWidth="44.0" text="&lt;" BorderPane.alignment="CENTER" />
-                                 </center>
-                              </BorderPane>
-                              <Pane fx:id="presetBox" prefHeight="100.0" prefWidth="136.0" />
-                              <BorderPane prefHeight="77.0" prefWidth="29.0">
-                                 <center>
-                                    <Button fx:id="rightButton" mnemonicParsing="false" onAction="#onRight" text="&gt;" BorderPane.alignment="CENTER" />
-                                 </center>
-                              </BorderPane>
-                           </children>
-                        </HBox>
+                        <HBox fx:id="presetBox" prefHeight="168.0" prefWidth="189.0" />
                      </children>
                   </VBox>
                   <Separator opacity="0.0" prefHeight="13.0" prefWidth="195.0" />
@@ -94,7 +87,7 @@
             </VBox>
             <VBox prefHeight="61.0" prefWidth="195.0">
                <children>
-                  <Separator prefHeight="7.0" prefWidth="195.0" />
+                  <Separator prefHeight="18.0" prefWidth="195.0" />
                   <Label text="Save or load board:" />
                   <BorderPane prefHeight="8.0" prefWidth="195.0">
                      <right>
