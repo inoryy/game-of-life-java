@@ -55,11 +55,13 @@ public class Controller implements Initializable {
     @FXML
     private Slider countSlider;
     @FXML
-    private HBox presetBox = new HBox();
+    private HBox presetBox;
     @FXML
     private Button openButton, saveButton;
     @FXML
     private Button runButton, stopButton, randomizeButton, clearButton;
+    @FXML
+    private HBox rootBox;
 
     private Board board;
 
@@ -68,6 +70,8 @@ public class Controller implements Initializable {
     private ConsoleDriver console = null;
 
     private Timeline loop = null;
+    
+    private int windowWidth = 750;
     
     private Pagination presetsPagination;
 
@@ -81,6 +85,8 @@ public class Controller implements Initializable {
         presetBox.getChildren().add(anchor);
 
         createBoard(DEFAULT_SIZE, DEFAULT_PROB);
+        
+        attachResizeListener();
     }
 
     @FXML
@@ -331,5 +337,22 @@ public class Controller implements Initializable {
 
         base.getChildren().clear();
         base.getChildren().add(new Group(display.getPane()));
+    }
+    
+    private void attachResizeListener() {
+        ChangeListener<Number> sizeListener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                int newWidth = newValue.intValue();
+                if (newWidth > 250 && Math.abs(newWidth - windowWidth) >= 50) {
+                    windowWidth = newWidth;
+                    display = new JavaFXDisplayDriver(DEFAULT_SIZE, newWidth / 25, board);
+
+                    base.getChildren().clear();
+                    base.getChildren().add(new Group(display.getPane()));
+                }
+            }
+        };
+        rootBox.widthProperty().addListener(sizeListener);
     }
 }
