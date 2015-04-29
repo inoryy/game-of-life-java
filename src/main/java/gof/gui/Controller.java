@@ -72,7 +72,7 @@ public class Controller implements Initializable {
     private ConsoleDriver console = null;
 
     private Timeline loop = null;
-
+    
     private Pagination presetsPagination;
 
     private int presetCount = 0;
@@ -81,48 +81,10 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // PRESETS //
-        File dir = new File("Presets");
-        File[] selectedFiles = dir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                if (pathname.getName().endsWith(".gofb")){
-                    presetCount++;
-                    return true;}
-                return false;
-            }
-        });
-        int pr = 0;
-        presets = new String[presetCount];
-        for (File selectedFile : selectedFiles) {
-            presets[pr] = selectedFile.getName().substring(0, selectedFile.getName().length() - 5);
-            pr++;
-        }
-
-        presetsPagination = new Pagination(presets.length, 0);
-        //pagination.setStyle("-fx-border-color:red;");
-        presetsPagination.setPageFactory(new Callback<Integer, Node>() {
-            @Override
-            public Node call(Integer pageIndex) {
-                if (pageIndex >= presets.length) {
-                    return null;
-                } else {
-                    return createPresetPage(pageIndex);
-                }
-            }
-        });
-
-        AnchorPane anchor = new AnchorPane();
-        AnchorPane.setTopAnchor(presetsPagination, 10.0);
-        AnchorPane.setRightAnchor(presetsPagination, 10.0);
-        AnchorPane.setBottomAnchor(presetsPagination, 10.0);
-        AnchorPane.setLeftAnchor(presetsPagination, 10.0);
-        anchor.getChildren().addAll(presetsPagination);
+        AnchorPane anchor = loadPresets();
         presetBox.getChildren().add(anchor);
-        // END PRESETS //
 
         createBoard(DEFAULT_SIZE, DEFAULT_PROB);
-
     }
 
     @FXML
@@ -155,42 +117,6 @@ public class Controller implements Initializable {
     @FXML
     private void onRandomize(Event evt) {
         createBoard(DEFAULT_SIZE, (double) countSlider.getValue()/100);
-    }
-
-    public VBox createPresetPage(int pageIndex) {
-        VBox box = new VBox(5);
-        for (int i = pageIndex; i < pageIndex + 1; i++) {
-            TextArea text = new TextArea(presets[i]);
-            text.setWrapText(true);
-            String presetName = Character.toUpperCase(presets[i].charAt(0)) + presets[i].substring(1);
-            Label l = new Label(presetName);
-            Button openPresetButton = new Button("Open");
-            int ii = i;
-            openPresetButton.setOnAction(event -> openPreset(presets[ii]));
-            HBox nameAndOpen = new HBox(5);
-            nameAndOpen.getChildren().addAll(l,openPresetButton);
-            File f1 = new File("Presets/"+presets[i]+".png");
-            if(f1.exists() && !f1.isDirectory()) { 
-                Image myPreset = new Image("file:Presets/"+presets[i]+".png");
-                ImageView myPresetView = new ImageView();
-                myPresetView.setImage(myPreset);
-                box.getChildren().add(myPresetView);
-            } else {
-                File f = new File("Presets/nopreview.png");
-                if(f.exists() && !f.isDirectory()) { 
-                    Image noprevImg = new Image("file:Presets/nopreview.png"); //new Image("Presets/nopreview.png");
-                    ImageView noprev = new ImageView();
-                    noprev.setImage(noprevImg);
-                    box.getChildren().add(noprev);
-                } else {
-                    System.out.println("nopreview.png not found");
-                }
-            }
-
-
-            box.getChildren().add(nameAndOpen);
-        }
-        return box;
     }
 
     @FXML
@@ -333,6 +259,83 @@ public class Controller implements Initializable {
         dialog.setScene(dialogScene);
         dialog.show();
         // END WINDOW //
+    }
+    
+    private AnchorPane loadPresets() {
+        File dir = new File("Presets");
+        File[] selectedFiles = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.getName().endsWith(".gofb")){
+                    presetCount++;
+                    return true;}
+                return false;
+            }
+        });
+        int pr = 0;
+        presets = new String[presetCount];
+        for (File selectedFile : selectedFiles) {
+            presets[pr] = selectedFile.getName().substring(0, selectedFile.getName().length() - 5);
+            pr++;
+        }
+
+        presetsPagination = new Pagination(presets.length, 0);
+        //pagination.setStyle("-fx-border-color:red;");
+        presetsPagination.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer pageIndex) {
+                if (pageIndex >= presets.length) {
+                    return null;
+                } else {
+                    return createPresetPage(pageIndex);
+                }
+            }
+        });
+
+        AnchorPane anchor = new AnchorPane();
+        AnchorPane.setTopAnchor(presetsPagination, 10.0);
+        AnchorPane.setRightAnchor(presetsPagination, 10.0);
+        AnchorPane.setBottomAnchor(presetsPagination, 10.0);
+        AnchorPane.setLeftAnchor(presetsPagination, 10.0);
+        anchor.getChildren().addAll(presetsPagination);
+        
+        return anchor;
+    }
+
+    private VBox createPresetPage(int pageIndex) {
+        VBox box = new VBox(5);
+        for (int i = pageIndex; i < pageIndex + 1; i++) {
+            TextArea text = new TextArea(presets[i]);
+            text.setWrapText(true);
+            String presetName = Character.toUpperCase(presets[i].charAt(0)) + presets[i].substring(1);
+            Label l = new Label(presetName);
+            Button openPresetButton = new Button("Open");
+            int ii = i;
+            openPresetButton.setOnAction(event -> openPreset(presets[ii]));
+            HBox nameAndOpen = new HBox(5);
+            nameAndOpen.getChildren().addAll(l, openPresetButton);
+            File f1 = new File("Presets/"+presets[i]+".png");
+            if(f1.exists() && !f1.isDirectory()) { 
+                Image myPreset = new Image("file:Presets/"+presets[i]+".png");
+                ImageView myPresetView = new ImageView();
+                myPresetView.setImage(myPreset);
+                box.getChildren().add(myPresetView);
+            } else {
+                File f = new File("Presets/nopreview.png");
+                if(f.exists() && !f.isDirectory()) { 
+                    Image noprevImg = new Image("file:Presets/nopreview.png"); //new Image("Presets/nopreview.png");
+                    ImageView noprev = new ImageView();
+                    noprev.setImage(noprevImg);
+                    box.getChildren().add(noprev);
+                } else {
+                    System.out.println("nopreview.png not found");
+                }
+            }
+
+
+            box.getChildren().add(nameAndOpen);
+        }
+        return box;
     }
 
     private void openPreset(String presetName) {
