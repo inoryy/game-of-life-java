@@ -8,12 +8,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -34,7 +30,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -53,40 +48,36 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 public class Controller implements Initializable {
+    
+    private final int    DEFAULT_SIZE = 15;
+    private final double DEFAULT_PROB = 0.3;
 
     @FXML
     private FlowPane base;
-
     @FXML
     private Label countLabel;
     @FXML
     private Slider countSlider;
-
     @FXML
     private HBox presetBox = new HBox();
     @FXML
-    private Button openButton;
+    private Button openButton, saveButton;
     @FXML
-    private Button saveButton;
-    @FXML
-    private Button runButton;
-    @FXML
-    private Button stopButton;
-    @FXML
-    private Button randomizeButton;
-    @FXML
-    private Button clearButton;
+    private Button runButton, stopButton, randomizeButton, clearButton;
 
     private Board board;
 
     private JavaFXDisplayDriver display;
+
     private ConsoleDriver console = null;
 
     private Timeline loop = null;
 
     private Pagination presetsPagination;
-    static String[] presets;
-    int presetCount = 0;
+
+    private int presetCount = 0;
+
+    private static String[] presets;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -130,8 +121,40 @@ public class Controller implements Initializable {
         presetBox.getChildren().add(anchor);
         // END PRESETS //
 
-        createBoard(15, 0.3);
+        createBoard(DEFAULT_SIZE, DEFAULT_PROB);
 
+    }
+
+    @FXML
+    private void onRun(Event evt) {
+        toggleButtons(false);
+
+        loop = new Timeline(new KeyFrame(Duration.millis(300), e -> {
+            board.update();
+            display.displayBoard(board);
+            if (console != null) {
+                console.displayBoard(board);
+            }
+        }));
+
+        loop.setCycleCount(100);
+        loop.play();
+    }
+
+    @FXML
+    private void onStop(Event evt) {
+        toggleButtons(true);
+        loop.stop();
+    }
+
+    @FXML
+    private void onClear(Event evt) {
+        createBoard(DEFAULT_SIZE, 0);
+    }
+
+    @FXML
+    private void onRandomize(Event evt) {
+        createBoard(DEFAULT_SIZE, (double) countSlider.getValue()/100);
     }
 
     public VBox createPresetPage(int pageIndex) {
@@ -171,50 +194,6 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void onRandomize(Event evt) {
-        createBoard(15, (double)countSlider.getValue()/100);
-    }
-
-    @FXML
-    private void onRun(Event evt) {
-        /////////// DISABLE/ENABLE BLOCK ///////////
-        countSlider.setDisable(true);
-        presetBox.setDisable(true);
-        openButton.setDisable(true);
-        saveButton.setDisable(true);
-        runButton.setDisable(true);
-        randomizeButton.setDisable(true);
-        clearButton.setDisable(true);
-        stopButton.setDisable(false);
-        /////////// END OF DISABLE/ENABLE BLOCK ///////////
-        loop = new Timeline(new KeyFrame(Duration.millis(300), e -> {
-            board.update();
-            display.displayBoard(board);
-            if (console != null) {
-                console.displayBoard(board);
-            }
-        }));
-        loop.setCycleCount(100);
-        loop.play();
-    }
-
-    @FXML
-    private void onStop(Event evt) {
-        /////////// DISABLE/ENABLE BLOCK ///////////
-        countSlider.setDisable(false);
-        presetBox.setDisable(false);
-        openButton.setDisable(false);
-        saveButton.setDisable(false);
-        runButton.setDisable(false);
-        randomizeButton.setDisable(false);
-        clearButton.setDisable(false);
-        stopButton.setDisable(true);
-        /////////// END OF DISABLE/ENABLE BLOCK ///////////
-        loop.stop();
-        stopButton.setDisable(true);
-    }
-
-    @FXML
     private void onOpen(Event evt) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Game of Life Board File");
@@ -241,7 +220,7 @@ public class Controller implements Initializable {
             s.close();
 
             int pos = 0;
-            createBoard(rows,0);
+            createBoard(DEFAULT_SIZE, 0);
             Cell[][] g = board.getGrid();
             for (int i = 0; i < g.length; i++) {
                 for (int j = 0; j < g[0].length; j++) {
@@ -261,7 +240,7 @@ public class Controller implements Initializable {
 
             board = new Board(g);
 
-            display = new JavaFXDisplayDriver(15, 30, board);
+            display = new JavaFXDisplayDriver(DEFAULT_SIZE, 30, board);
 
             base.getChildren().clear();
             base.getChildren().add(new Group(display.getPane()));
@@ -315,14 +294,9 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Number> observable,
                     Number oldValue, Number newValue) {
                 countLabel.setText(newValue.intValue()+"%");
-                createBoard(15, (double)newValue.intValue()/100);
+                createBoard(DEFAULT_SIZE, (double) newValue.intValue()/100);
             }
         });
-    }
-
-    @FXML
-    private void onClear(Event evt) {
-        createBoard(15, 0);
     }
 
 
@@ -401,7 +375,7 @@ public class Controller implements Initializable {
 
             board = new Board(g);
 
-            display = new JavaFXDisplayDriver(15, 30, board);
+            display = new JavaFXDisplayDriver(DEFAULT_SIZE, 30, board);
 
             base.getChildren().clear();
             base.getChildren().add(new Group(display.getPane()));
@@ -409,6 +383,18 @@ public class Controller implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }       
+    }
+    
+    private void toggleButtons(boolean enable) {
+        countSlider.setDisable(!enable);
+        presetBox.setDisable(!enable);
+        openButton.setDisable(!enable);
+        saveButton.setDisable(!enable);
+        runButton.setDisable(!enable);
+        clearButton.setDisable(!enable);
+        randomizeButton.setDisable(!enable);
+
+        stopButton.setDisable(enable);
     }
 
     private void createBoard(int size, double prob) {
@@ -418,7 +404,7 @@ public class Controller implements Initializable {
         // console = new ConsoleDriver();
         // console.displayBoard(board);
 
-        display = new JavaFXDisplayDriver(15, 30, board);
+        display = new JavaFXDisplayDriver(size, 30, board);
 
         base.getChildren().clear();
         base.getChildren().add(new Group(display.getPane()));
