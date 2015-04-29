@@ -215,11 +215,6 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void onSet(Event evt) {
-        System.out.println("action not set");
-    }
-
-    @FXML
     private void onOpen(Event evt) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Game of Life Board File");
