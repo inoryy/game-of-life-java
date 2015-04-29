@@ -34,6 +34,10 @@ public class Board {
     public Cell[][] getGrid() {
         return grid;
     }
+    
+    public int getSize() {
+        return width;
+    }
 
     public int neighboursCountAt(int row, int col) {
         int sum=0;

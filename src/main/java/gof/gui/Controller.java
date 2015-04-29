@@ -7,8 +7,6 @@ import gof.core.Cell;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -40,8 +38,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -124,75 +120,16 @@ public class Controller implements Initializable {
      */
     @FXML
     private void onOpen(Event evt) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Game of Life Board File");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("GOFB files (*.gofb)", "*.gofb"));
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        board = FileHandler.openFromFile(DEFAULT_SIZE);
+        display = new JavaFXDisplayDriver(board.getSize(), 30, board);
 
-        if (selectedFile == null) {
-            return;
-        }
-        
-        try (Scanner s = new Scanner(selectedFile)) {
-            String input = "";
-            int sz = DEFAULT_SIZE;
-            while (s.hasNextLine()) {
-                String line = s.nextLine().replaceAll("\\s+","");
-                input += line;
-                
-                sz = line.length();
-            }
-
-            int pos = 0;
-            Cell[][] g = new Cell[sz][sz];
-            for (int i = 0; i < sz; i++) {
-                for (int j = 0; j < sz; j++) {
-                    boolean state = (input.charAt(pos) =='1');
-                    g[i][j] = new Cell(state);
-                    pos++;
-                }
-            }
-
-            board = new Board(g);
-            display = new JavaFXDisplayDriver(sz, 30, board);
-
-            base.getChildren().clear();
-            base.getChildren().add(new Group(display.getPane()));
-
-        } catch (FileNotFoundException e) {
-            // will never happen since we return on null file
-            e.printStackTrace();
-        }
+        base.getChildren().clear();
+        base.getChildren().add(new Group(display.getPane()));
     }
 
     @FXML
     private void onSave(Event evt) {
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GOFB files (*.gofb)", "*.gofb");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showSaveDialog(new Stage());
-        
-        if (file == null) {
-            return;
-        }
-        
-        String output = ""; // string of numbers from board
-        Cell[][] g = board.getGrid();
-        for (int i = 0; i < g.length; i++) {
-            for (int j = 0; j < g[0].length; j++) {
-                output+= g[i][j].getState() ? 1 : 0;
-            }
-            if (i != g.length-1){
-                output+="\n";
-            }
-        }
-
-        try (FileWriter fileWriter = new FileWriter(file + ".gofb")) {
-            fileWriter.write(output);
-            fileWriter.close();
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+        FileHandler.saveToFile(board);
     }
 
 
