@@ -7,6 +7,7 @@ public class Board {
 
     public Board(Cell[][] grid) {
         this.grid = grid;
+        height = width = grid.length;
     }
 
     /**

@@ -119,71 +119,64 @@ public class Controller implements Initializable {
         createBoard(DEFAULT_SIZE, (double) countSlider.getValue()/100);
     }
 
+    /**
+     * TODO: check if valid file (correct number of cells for rectangle shaped board)
+     */
     @FXML
     private void onOpen(Event evt) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Game of Life Board File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("GOFB files (*.gofb)", "*.gofb"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
-        while (selectedFile == null) {
-            selectedFile = fileChooser.showOpenDialog(new Stage());
-        }
 
-        try {
-            Scanner s = new Scanner(selectedFile);
-            int rows = 0;
-            int cols = 0;
+        if (selectedFile == null) {
+            return;
+        }
+        
+        try (Scanner s = new Scanner(selectedFile)) {
             String input = "";
-            while(s.hasNextLine()){
-                String line = s.nextLine();
-                if (cols == 0){
-                    cols = line.length();
-                }
-                line.replaceAll("\\s+","");
-                input+=line;
-                rows++;
+            int sz = DEFAULT_SIZE;
+            while (s.hasNextLine()) {
+                String line = s.nextLine().replaceAll("\\s+","");
+                input += line;
+                
+                sz = line.length();
             }
-            s.close();
 
             int pos = 0;
-            createBoard(DEFAULT_SIZE, 0);
-            Cell[][] g = board.getGrid();
-            for (int i = 0; i < g.length; i++) {
-                for (int j = 0; j < g[0].length; j++) {
-                    char c = input.charAt(pos);
-                    //boolean state = (int) c == 1 ? true : false;
-                    boolean state;
-                    if (c =='1'){
-                        state = true;
-                    } else {
-                        state = false;
-                    }
-                    g[i][j].setNewState(state);
-                    g[i][j].updateState();
+            Cell[][] g = new Cell[sz][sz];
+            for (int i = 0; i < sz; i++) {
+                for (int j = 0; j < sz; j++) {
+                    boolean state = (input.charAt(pos) =='1');
+                    g[i][j] = new Cell(state);
                     pos++;
                 }
             }
 
             board = new Board(g);
-
-            display = new JavaFXDisplayDriver(DEFAULT_SIZE, 30, board);
+            display = new JavaFXDisplayDriver(sz, 30, board);
 
             base.getChildren().clear();
             base.getChildren().add(new Group(display.getPane()));
-            //createBoard(rows,cols, 0);
+
         } catch (FileNotFoundException e) {
+            // will never happen since we return on null file
             e.printStackTrace();
         }
-
-        //check if valid file (correct number of cells for rectangle shaped board)
-
-
     }
 
     @FXML
     private void onSave(Event evt) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GOFB files (*.gofb)", "*.gofb");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(new Stage());
+        
+        if (file == null) {
+            return;
+        }
+        
         String output = ""; // string of numbers from board
-
         Cell[][] g = board.getGrid();
         for (int i = 0; i < g.length; i++) {
             for (int j = 0; j < g[0].length; j++) {
@@ -194,21 +187,11 @@ public class Controller implements Initializable {
             }
         }
 
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GOFB files (*.gofb)", "*.gofb");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showSaveDialog(new Stage());
-
-        if(file != null){
-            try {
-                FileWriter fileWriter = null;
-
-                fileWriter = new FileWriter(file);
-                fileWriter.write(output);
-                fileWriter.close();
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
+        try (FileWriter fileWriter = new FileWriter(file + ".gofb")) {
+            fileWriter.write(output);
+            fileWriter.close();
+        } catch (IOException ex) {
+            System.out.println(ex);
         }
     }
 
