@@ -53,21 +53,15 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 public class Controller implements Initializable {
-    
+
     @FXML
     private FlowPane base;
-    
+
     @FXML
     private Label countLabel;
     @FXML
     private Slider countSlider;
-    @FXML
-    private TextField rowsField;
-    @FXML
-    private TextField colsField;
-    @FXML
-    private Button setButton;
-    
+
     @FXML
     private HBox presetBox = new HBox();
     @FXML
@@ -82,17 +76,18 @@ public class Controller implements Initializable {
     private Button randomizeButton;
     @FXML
     private Button clearButton;
-    
+
     private Board board;
-    
+
     private JavaFXDisplayDriver display;
     private ConsoleDriver console = null;
-    
+
     private Timeline loop = null;
-    
+
     private Pagination presetsPagination;
     static String[] presets;
     int presetCount = 0;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // PRESETS //
@@ -125,7 +120,7 @@ public class Controller implements Initializable {
                 }
             }
         });
- 
+
         AnchorPane anchor = new AnchorPane();
         AnchorPane.setTopAnchor(presetsPagination, 10.0);
         AnchorPane.setRightAnchor(presetsPagination, 10.0);
@@ -134,11 +129,11 @@ public class Controller implements Initializable {
         anchor.getChildren().addAll(presetsPagination);
         presetBox.getChildren().add(anchor);
         // END PRESETS //
-        
-        createBoard(10, 10, 0.3);
-    	
+
+        createBoard(15, 0.3);
+
     }
-    
+
     public VBox createPresetPage(int pageIndex) {
         VBox box = new VBox(5);
         for (int i = pageIndex; i < pageIndex + 1; i++) {
@@ -168,8 +163,8 @@ public class Controller implements Initializable {
                     System.out.println("nopreview.png not found");
                 }
             }
-            
-            
+
+
             box.getChildren().add(nameAndOpen);
         }
         return box;
@@ -177,16 +172,13 @@ public class Controller implements Initializable {
 
     @FXML
     private void onRandomize(Event evt) {
-    	createBoard(10, 10, (double)countSlider.getValue()/100);
+        createBoard(15, (double)countSlider.getValue()/100);
     }
-    
+
     @FXML
     private void onRun(Event evt) {
         /////////// DISABLE/ENABLE BLOCK ///////////
         countSlider.setDisable(true);
-        rowsField.setDisable(true);
-        colsField.setDisable(true);
-        setButton.setDisable(true);
         presetBox.setDisable(true);
         openButton.setDisable(true);
         saveButton.setDisable(true);
@@ -196,23 +188,20 @@ public class Controller implements Initializable {
         stopButton.setDisable(false);
         /////////// END OF DISABLE/ENABLE BLOCK ///////////
         loop = new Timeline(new KeyFrame(Duration.millis(300), e -> {
-        	board.update();
-        	display.displayBoard(board);
-        	if (console != null) {
-        		console.displayBoard(board);
-        	}
+            board.update();
+            display.displayBoard(board);
+            if (console != null) {
+                console.displayBoard(board);
+            }
         }));
         loop.setCycleCount(100);
         loop.play();
     }
-    
+
     @FXML
     private void onStop(Event evt) {
         /////////// DISABLE/ENABLE BLOCK ///////////
         countSlider.setDisable(false);
-        rowsField.setDisable(false);
-        colsField.setDisable(false);
-        setButton.setDisable(false);
         presetBox.setDisable(false);
         openButton.setDisable(false);
         saveButton.setDisable(false);
@@ -221,15 +210,15 @@ public class Controller implements Initializable {
         clearButton.setDisable(false);
         stopButton.setDisable(true);
         /////////// END OF DISABLE/ENABLE BLOCK ///////////
-    	loop.stop();
-    	stopButton.setDisable(true);
+        loop.stop();
+        stopButton.setDisable(true);
     }
-    
+
     @FXML
     private void onSet(Event evt) {
         System.out.println("action not set");
     }
-    
+
     @FXML
     private void onOpen(Event evt) {
         FileChooser fileChooser = new FileChooser();
@@ -239,62 +228,62 @@ public class Controller implements Initializable {
         while (selectedFile == null) {
             selectedFile = fileChooser.showOpenDialog(new Stage());
         }
-        
-       try {
-           Scanner s = new Scanner(selectedFile);
-           int rows = 0;
-           int cols = 0;
-           String input = "";
-           while(s.hasNextLine()){
-               String line = s.nextLine();
-               if (cols == 0){
-                   cols = line.length();
-               }
-               line.replaceAll("\\s+","");
-               input+=line;
-               rows++;
-           }
-           s.close();
-           
-           int pos = 0;
-           createBoard(rows,cols,0);
-           Cell[][] g = board.getGrid();
-           for (int i = 0; i < g.length; i++) {
-               for (int j = 0; j < g[0].length; j++) {
-                   char c = input.charAt(pos);
-                   //boolean state = (int) c == 1 ? true : false;
-                   boolean state;
-                   if (c =='1'){
-                       state = true;
-                   } else {
-                       state = false;
-                   }
-                   g[i][j].setNewState(state);
-                   g[i][j].updateState();
-                   pos++;
-               }
-           }
-                     
-           board = new Board(g);
 
-           display = new JavaFXDisplayDriver(10, 30, board);
+        try {
+            Scanner s = new Scanner(selectedFile);
+            int rows = 0;
+            int cols = 0;
+            String input = "";
+            while(s.hasNextLine()){
+                String line = s.nextLine();
+                if (cols == 0){
+                    cols = line.length();
+                }
+                line.replaceAll("\\s+","");
+                input+=line;
+                rows++;
+            }
+            s.close();
 
-           base.getChildren().clear();
-           base.getChildren().add(new Group(display.getPane()));
-           //createBoard(rows,cols, 0);
-       } catch (FileNotFoundException e) {
-           e.printStackTrace();
-       }
-       
+            int pos = 0;
+            createBoard(rows,0);
+            Cell[][] g = board.getGrid();
+            for (int i = 0; i < g.length; i++) {
+                for (int j = 0; j < g[0].length; j++) {
+                    char c = input.charAt(pos);
+                    //boolean state = (int) c == 1 ? true : false;
+                    boolean state;
+                    if (c =='1'){
+                        state = true;
+                    } else {
+                        state = false;
+                    }
+                    g[i][j].setNewState(state);
+                    g[i][j].updateState();
+                    pos++;
+                }
+            }
+
+            board = new Board(g);
+
+            display = new JavaFXDisplayDriver(15, 30, board);
+
+            base.getChildren().clear();
+            base.getChildren().add(new Group(display.getPane()));
+            //createBoard(rows,cols, 0);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         //check if valid file (correct number of cells for rectangle shaped board)
 
-        
+
     }
-    
+
     @FXML
     private void onSave(Event evt) {
         String output = ""; // string of numbers from board
-        
+
         Cell[][] g = board.getGrid();
         for (int i = 0; i < g.length; i++) {
             for (int j = 0; j < g[0].length; j++) {
@@ -304,16 +293,16 @@ public class Controller implements Initializable {
                 output+="\n";
             }
         }
-        
+
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GOFB files (*.gofb)", "*.gofb");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(new Stage());
-        
+
         if(file != null){
             try {
                 FileWriter fileWriter = null;
-                 
+
                 fileWriter = new FileWriter(file);
                 fileWriter.write(output);
                 fileWriter.close();
@@ -323,7 +312,7 @@ public class Controller implements Initializable {
         }
     }
 
-    
+
     @FXML
     private void onSlide(Event evt) {
         countSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -331,25 +320,25 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Number> observable,
                     Number oldValue, Number newValue) {
                 countLabel.setText(newValue.intValue()+"%");
-                createBoard(10, 10, (double)newValue.intValue()/100);
+                createBoard(15, (double)newValue.intValue()/100);
             }
         });
     }
-    
+
     @FXML
     private void onClear(Event evt) {
-        createBoard(10, 10, 0);
+        createBoard(15, 0);
     }
-    
-    
+
+
     @FXML
     private void onAbout(Event evt) {
         // TEXT //
         Text text1 = new Text("Conway's Game of Life\n");
         text1.setFont(Font.font(30));
         Text text2 = new Text(
-                  "\nThe Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.\n"
-                + "The game is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves or, for advanced players, by creating patterns with particular properties."
+                "\nThe Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.\n"
+                        + "The game is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves or, for advanced players, by creating patterns with particular properties."
                 );
         Text text3 = new Text("\n\nRules\n");
         text3.setFont(Font.font(20));
@@ -360,7 +349,7 @@ public class Controller implements Initializable {
                         +"3) Any live cell with more than three live neighbours dies, as if by overcrowding.\n"
                         +"4) Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.\n\nMore on Wikipedia:\n"
                 );
-        
+
         Hyperlink link = new Hyperlink("http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life <-------not working");
         TextFlow tf = new TextFlow(text1,text2,text3,text4,link);
         tf.setPadding(new Insets(10, 10, 10, 10));
@@ -376,65 +365,65 @@ public class Controller implements Initializable {
         dialog.show();
         // END WINDOW //
     }
-    
+
     private void openPreset(String presetName) {
-       
-       File selectedFile = new File ("Presets/"+presetName+".gofb");   
-       try {
-           Scanner s = new Scanner(selectedFile);
-           int rows = 0;
-           int cols = 0;
-           String input = "";
-           while(s.hasNextLine()){
-               String line = s.nextLine();
-               if (cols == 0){
-                   cols = line.length();
-               }
-               line.replaceAll("\\s+","");
-               input+=line;
-               rows++;
-           }
-           s.close();
-           
-           int pos = 0;
-           createBoard(rows,cols,0);
-           Cell[][] g = board.getGrid();
-           for (int i = 0; i < g.length; i++) {
-               for (int j = 0; j < g[0].length; j++) {
-                   char c = input.charAt(pos);
-                   //boolean state = (int) c == 1 ? true : false;
-                   boolean state;
-                   if (c =='1'){
-                       state = true;
-                   } else {
-                       state = false;
-                   }
-                   g[i][j].setNewState(state);
-                   g[i][j].updateState();
-                   pos++;
-               }
-           }
-                     
-           board = new Board(g);
 
-           display = new JavaFXDisplayDriver(10, 30, board);
+        File selectedFile = new File ("Presets/"+presetName+".gofb");   
+        try {
+            Scanner s = new Scanner(selectedFile);
+            int rows = 0;
+            int cols = 0;
+            String input = "";
+            while(s.hasNextLine()){
+                String line = s.nextLine();
+                if (cols == 0){
+                    cols = line.length();
+                }
+                line.replaceAll("\\s+","");
+                input+=line;
+                rows++;
+            }
+            s.close();
 
-           base.getChildren().clear();
-           base.getChildren().add(new Group(display.getPane()));
-           //createBoard(rows,cols, 0);
-       } catch (FileNotFoundException e) {
-           e.printStackTrace();
-       }       
+            int pos = 0;
+            createBoard(rows,0);
+            Cell[][] g = board.getGrid();
+            for (int i = 0; i < g.length; i++) {
+                for (int j = 0; j < g[0].length; j++) {
+                    char c = input.charAt(pos);
+                    //boolean state = (int) c == 1 ? true : false;
+                    boolean state;
+                    if (c =='1'){
+                        state = true;
+                    } else {
+                        state = false;
+                    }
+                    g[i][j].setNewState(state);
+                    g[i][j].updateState();
+                    pos++;
+                }
+            }
+
+            board = new Board(g);
+
+            display = new JavaFXDisplayDriver(15, 30, board);
+
+            base.getChildren().clear();
+            base.getChildren().add(new Group(display.getPane()));
+            //createBoard(rows,cols, 0);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }       
     }
-    
-    private void createBoard(int rows, int cols, double prob) {
-        //board = new Board(10, 10, 0.3);
-        board = new Board(rows, cols, prob);
+
+    private void createBoard(int size, double prob) {
+        board = new Board(size, size, prob);
+
         // for debugging
         // console = new ConsoleDriver();
         // console.displayBoard(board);
-        
-        display = new JavaFXDisplayDriver(10, 30, board);
+
+        display = new JavaFXDisplayDriver(15, 30, board);
 
         base.getChildren().clear();
         base.getChildren().add(new Group(display.getPane()));

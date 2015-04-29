@@ -9,9 +9,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="497.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gof.gui.Controller">
    <children>
-      <FlowPane fx:id="base" prefHeight="400.0" prefWidth="387.0">
+      <FlowPane fx:id="base" prefHeight="475.0" prefWidth="475.0">
          <HBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </HBox.margin></FlowPane>
@@ -34,6 +34,9 @@
                         </Glow>
                      </effect></Label>
                </children>
+               <VBox.margin>
+                  <Insets left="5.0" />
+               </VBox.margin>
             </TextFlow>
             <VBox prefHeight="275.0" prefWidth="197.0">
                <children>
@@ -43,7 +46,10 @@
                            <children>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Cell density: " />
+                                    <Label text="Cell density: ">
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin></Label>
                                     <Label fx:id="countLabel" text="30%" />
                                  </children>
                               </HBox>
@@ -51,44 +57,47 @@
                            </children>
                         </VBox>
                      </children>
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
                   </VBox>
                   <Separator opacity="0.0" prefWidth="200.0" />
-                  <VBox prefHeight="50.0" prefWidth="189.0">
-                     <children>
-                        <Label prefHeight="24.0" prefWidth="126.0" text="Board dimensions:" />
-                        <HBox prefHeight="36.0" prefWidth="196.0">
-                           <children>
-                              <Label prefHeight="24.0" prefWidth="34.0" text="Rows: " />
-                              <TextField fx:id="rowsField" prefHeight="25.0" prefWidth="30.0" />
-                              <Label contentDisplay="CENTER" prefHeight="24.0" prefWidth="59.0" text="  Columns: " />
-                              <TextField fx:id="colsField" prefHeight="25.0" prefWidth="30.0" />
-                              <Button fx:id="setButton" mnemonicParsing="false" onAction="#onSet" text="Set">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
                   <VBox prefHeight="162.0" prefWidth="195.0">
                      <children>
                         <Separator prefHeight="16.0" prefWidth="195.0" />
-                        <Label prefHeight="27.0" prefWidth="79.0" text="Choose preset:">
+                        <Label prefHeight="15.0" prefWidth="102.0" text="Choose preset:">
                            <opaqueInsets>
                               <Insets top="10.0" />
                            </opaqueInsets>
                         </Label>
                         <HBox fx:id="presetBox" prefHeight="168.0" prefWidth="189.0" />
                      </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
                   </VBox>
-                  <Separator opacity="0.0" prefHeight="13.0" prefWidth="195.0" />
+                  <Separator opacity="0.0" prefHeight="13.0" prefWidth="195.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding></Separator>
                </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </VBox>
             <VBox prefHeight="61.0" prefWidth="195.0">
                <children>
                   <Separator prefHeight="18.0" prefWidth="195.0" />
-                  <Label text="Save or load board:" />
+                  <Label prefHeight="15.0" prefWidth="137.0" text="Save or load board:">
+                     <VBox.margin>
+                        <Insets left="50.0" />
+                     </VBox.margin></Label>
                   <BorderPane prefHeight="8.0" prefWidth="195.0">
                      <right>
                         <FlowPane prefHeight="35.0" prefWidth="150.0" BorderPane.alignment="CENTER">
@@ -107,6 +116,9 @@
                            </children>
                         </FlowPane>
                      </right>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
                   </BorderPane>
                </children>
             </VBox>
@@ -123,6 +135,9 @@
                <left>
                   <Label text="Board:" BorderPane.alignment="CENTER" />
                </left>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
             </BorderPane>
             <BorderPane prefHeight="39.0" prefWidth="195.0">
                <left>
@@ -137,6 +152,9 @@
                <right>
                   <Button fx:id="aboutButton" mnemonicParsing="false" onAction="#onAbout" text="About" BorderPane.alignment="CENTER" />
                </right>
+               <padding>
+                  <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
             </BorderPane>
          </children>
          <padding>
