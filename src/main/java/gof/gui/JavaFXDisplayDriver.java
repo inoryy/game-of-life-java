@@ -23,22 +23,8 @@ public class JavaFXDisplayDriver implements DisplayDriver {
                 Color c = g[i][j].getState() ? Color.STEELBLUE : Color.WHITE;
                 Rectangle r = new Rectangle(cellSizePx, cellSizePx, c);
                 tilePane.getChildren().add(r);
-                int ii = i;
-                int jj = j;
-                boolean newState = g[i][j].getState() ? false : true;
-                r.setOnMousePressed(event -> {
-                    r.setFill(Color.GRAY);
-
-                });
-
-                r.setOnMouseClicked(event -> {
-                    r.setFill(g[ii][jj].getState() ? Color.WHITE : Color.STEELBLUE);
-                    g[ii][jj].setNewState(newState);
-                    g[ii][jj].updateState();
-
-                });
-
-
+                
+                attachListeners(r, g[i][j]);
             }
         }
     }
@@ -60,5 +46,15 @@ public class JavaFXDisplayDriver implements DisplayDriver {
 
     private int boardToPaneCoords(int i, int j) {
         return i * sz + j;
+    }
+    
+    private void attachListeners(Rectangle r, Cell c) {
+        r.setOnMousePressed(e -> { r.setFill(Color.GRAY); });
+
+        r.setOnMouseClicked(e -> {
+            r.setFill(c.getState() ? Color.WHITE : Color.STEELBLUE);
+            c.setNewState(!c.getState());
+            c.updateState();
+        });
     }
 }
