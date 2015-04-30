@@ -14,7 +14,7 @@ It supports randomized board generation, preset loading, save/load to/from file.
 
 ### GUI output
 
-
+![kvdw4](https://cloud.githubusercontent.com/assets/195271/7415217/f21d98cc-ef5f-11e4-9e0e-b80226e36ffa.gif)
 
 ### Console output
 
