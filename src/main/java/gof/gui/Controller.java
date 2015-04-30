@@ -1,15 +1,9 @@
 package gof.gui;
 
-import gof.console.ConsoleDriver;
 import gof.core.Board;
-import gof.core.Cell;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -20,16 +14,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -40,7 +29,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.Duration;
 
 public class Controller implements Initializable {
@@ -57,7 +45,7 @@ public class Controller implements Initializable {
     @FXML
     private HBox presetBox;
     @FXML
-    private Button openButton, saveButton;
+    private Button openButton, saveButton, openPresetBtn;
     @FXML
     private Button runButton, stopButton, randomizeButton, clearButton;
     @FXML
@@ -190,6 +178,7 @@ public class Controller implements Initializable {
         countSlider.setDisable(!enable);
         presetBox.setDisable(!enable);
         openButton.setDisable(!enable);
+        openPresetBtn.setDisable(!enable);
         saveButton.setDisable(!enable);
         runButton.setDisable(!enable);
         clearButton.setDisable(!enable);
