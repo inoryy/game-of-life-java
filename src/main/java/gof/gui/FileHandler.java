@@ -19,7 +19,11 @@ public class FileHandler {
         if (file == null) {
             return null;
         }
-
+        
+        return loadFromFile(file, defaultSize);
+    }
+    
+    public static Board loadFromFile(File file, int defaultSize) {
         String input = "";
         int sz = defaultSize;
         try (Scanner s = new Scanner(file)) {
@@ -47,7 +51,7 @@ public class FileHandler {
             }
         }
 
-        return new Board(g);
+        return new Board(g);        
     }
     
     public static void saveToFile(Board board) {

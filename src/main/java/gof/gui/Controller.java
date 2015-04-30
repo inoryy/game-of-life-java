@@ -68,14 +68,17 @@ public class Controller implements Initializable {
     private JavaFXDisplayDriver display;
 
     private ConsoleDriver console = null;
-
+    
     private Timeline loop = null;
     
     private int windowWidth = 750;
-    
+
+    private PresetHandler presetHandler;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AnchorPane anchor = PresetHandler.loadPresets(base);
+        presetHandler = new PresetHandler();
+        AnchorPane anchor = presetHandler.loadPresets(base);
         presetBox.getChildren().add(anchor);
 
         createBoard(DEFAULT_SIZE, DEFAULT_PROB);
@@ -113,6 +116,15 @@ public class Controller implements Initializable {
     @FXML
     private void onRandomize(Event evt) {
         createBoard(DEFAULT_SIZE, (double) countSlider.getValue()/100);
+    }
+    
+    @FXML
+    private void onPresetOpen(Event evt) {
+        board = presetHandler.openCurrentPreset(DEFAULT_SIZE);
+        display = new JavaFXDisplayDriver(board.getSize(), 30, board);
+
+        base.getChildren().clear();
+        base.getChildren().add(new Group(display.getPane()));
     }
 
     /**

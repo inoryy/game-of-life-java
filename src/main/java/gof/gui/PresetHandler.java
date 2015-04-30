@@ -23,14 +23,11 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class PresetHandler {
-    //private static Pagination presetsPagination;
-
+    private String[] presets;
+    private int presetCount = 0;
+    private String currentPreset;
     
-
-    private static String[] presets;
-    private static int presetCount = 0;
-    
-    public static AnchorPane loadPresets(FlowPane base) {
+    public AnchorPane loadPresets(FlowPane base) {
         
         File dir = new File("Presets");
         File[] selectedFiles = dir.listFiles(new FileFilter() {
@@ -72,18 +69,21 @@ public class PresetHandler {
         return anchor;
     }
     
-    private static VBox createPresetPage(int pageIndex, FlowPane base) {
+    public Board openCurrentPreset(int defaultSize) {
+        File selectedFile = new File ("Presets/"+currentPreset.toLowerCase()+".gofb");   
+        return FileHandler.loadFromFile(selectedFile, defaultSize);
+    }
+    
+    private VBox createPresetPage(int pageIndex, FlowPane base) {
         VBox box = new VBox(5);
         for (int i = pageIndex; i < pageIndex + 1; i++) {
             TextArea text = new TextArea(presets[i]);
             text.setWrapText(true);
-            String presetName = Character.toUpperCase(presets[i].charAt(0)) + presets[i].substring(1);
-            Label l = new Label(presetName);
-            Button openPresetButton = new Button("Open");
-            int ii = i;
-            openPresetButton.setOnAction(event -> openPreset(presets[ii], base));
+            currentPreset = Character.toUpperCase(presets[i].charAt(0)) + presets[i].substring(1);
+            Label l = new Label(currentPreset);
+
             HBox nameAndOpen = new HBox(5);
-            nameAndOpen.getChildren().addAll(l, openPresetButton);
+            nameAndOpen.getChildren().addAll(l);
             File f1 = new File("Presets/"+presets[i]+".png");
             if(f1.exists() && !f1.isDirectory()) { 
                 Image myPreset = new Image("file:Presets/"+presets[i]+".png");
@@ -106,48 +106,4 @@ public class PresetHandler {
         }
         return box;
     }
-    
-    private static void openPreset(String presetName, FlowPane base) {
-
-        File selectedFile = new File ("Presets/"+presetName+".gofb");   
-        try {
-            Scanner s = new Scanner(selectedFile);
-            int rows = 0;
-            int cols = 0;
-            String input = "";
-            int sz = 1;
-            while(s.hasNextLine()){
-                String line = s.nextLine();
-                if (cols == 0){
-                    cols = line.length();
-                }
-                line.replaceAll("\\s+","");
-                input+=line;
-                rows++;
-                sz = line.length();
-            }
-            s.close();
-
-            Cell[][] g = new Cell[sz][sz];
-            int pos = 0;
-            for (int i = 0; i < sz; i++) {
-                for (int j = 0; j < sz; j++) {
-                    boolean state = (input.charAt(pos) =='1');
-                    g[i][j] = new Cell(state);
-                    pos++;
-                }
-            }
-
-            Board board = new Board(g);
-
-            JavaFXDisplayDriver display = new JavaFXDisplayDriver(sz, 30, board);
-
-            base.getChildren().clear();
-            base.getChildren().add(new Group(display.getPane()));
-            //createBoard(rows,cols, 0);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }       
-    }
-
 }

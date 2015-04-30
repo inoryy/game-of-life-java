@@ -62,7 +62,7 @@
                      </VBox.margin>
                   </VBox>
                   <Separator opacity="0.0" prefWidth="200.0" />
-                  <VBox prefHeight="162.0" prefWidth="195.0">
+                  <VBox prefHeight="118.0" prefWidth="193.0">
                      <children>
                         <Separator prefHeight="16.0" prefWidth="195.0" />
                         <Label prefHeight="15.0" prefWidth="102.0" text="Choose preset:">
@@ -70,7 +70,7 @@
                               <Insets top="10.0" />
                            </opaqueInsets>
                         </Label>
-                        <HBox fx:id="presetBox" prefHeight="168.0" prefWidth="189.0" />
+                        <HBox fx:id="presetBox" prefHeight="92.0" prefWidth="183.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -83,6 +83,11 @@
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding></Separator>
+                  <Button fx:id="openPresetBtn" mnemonicParsing="false" onAction="#onPresetOpen" text="Open">
+                     <VBox.margin>
+                        <Insets left="70.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -102,7 +107,7 @@
                      <right>
                         <FlowPane prefHeight="35.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="openButton" mnemonicParsing="false" onAction="#onOpen" text="Open">
+                              <Button fx:id="openButton" mnemonicParsing="false" onAction="#onOpen" text="Load">
                                  <opaqueInsets>
                                     <Insets right="10.0" />
                                  </opaqueInsets>
