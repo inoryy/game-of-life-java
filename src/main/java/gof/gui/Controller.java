@@ -125,8 +125,11 @@ public class Controller implements Initializable {
      */
     @FXML
     private void onOpen(Event evt) {
-        board = FileHandler.openFromFile(DEFAULT_SIZE);
-        createDisplay();
+        Board newBoard = FileHandler.openFromFile(DEFAULT_SIZE);
+        if (newBoard != null) {
+            board = newBoard;
+            createDisplay();
+        }
     }
 
     @FXML
