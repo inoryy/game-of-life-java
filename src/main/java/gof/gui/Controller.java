@@ -67,11 +67,10 @@ public class Controller implements Initializable {
 
     private JavaFXDisplayDriver display;
 
-    private ConsoleDriver console = null;
-    
     private Timeline loop = null;
     
     private int windowWidth = 750;
+    private int cellSizePx = 30;
 
     private PresetHandler presetHandler;
 
@@ -93,9 +92,6 @@ public class Controller implements Initializable {
         loop = new Timeline(new KeyFrame(Duration.millis(300), e -> {
             board.update();
             display.displayBoard(board);
-            if (console != null) {
-                console.displayBoard(board);
-            }
         }));
 
         loop.setCycleCount(100);
@@ -121,10 +117,7 @@ public class Controller implements Initializable {
     @FXML
     private void onPresetOpen(Event evt) {
         board = presetHandler.openCurrentPreset(DEFAULT_SIZE);
-        display = new JavaFXDisplayDriver(board.getSize(), 30, board);
-
-        base.getChildren().clear();
-        base.getChildren().add(new Group(display.getPane()));
+        createDisplay();
     }
 
     /**
@@ -133,10 +126,7 @@ public class Controller implements Initializable {
     @FXML
     private void onOpen(Event evt) {
         board = FileHandler.openFromFile(DEFAULT_SIZE);
-        display = new JavaFXDisplayDriver(board.getSize(), 30, board);
-
-        base.getChildren().clear();
-        base.getChildren().add(new Group(display.getPane()));
+        createDisplay();
     }
 
     @FXML
@@ -207,15 +197,14 @@ public class Controller implements Initializable {
 
     private void createBoard(int size, double prob) {
         board = new Board(size, size, prob);
-
-        // for debugging
-        // console = new ConsoleDriver();
-        // console.displayBoard(board);
-
-        display = new JavaFXDisplayDriver(size, 30, board);
+        createDisplay();
+    }
+    
+    private void createDisplay() {
+        display = new JavaFXDisplayDriver(board.getSize(), cellSizePx, board);
 
         base.getChildren().clear();
-        base.getChildren().add(new Group(display.getPane()));
+        base.getChildren().add(new Group(display.getPane()));        
     }
     
     private void attachResizeListener() {
@@ -225,10 +214,8 @@ public class Controller implements Initializable {
                 int newWidth = newValue.intValue();
                 if (newWidth > 250 && Math.abs(newWidth - windowWidth) >= 50) {
                     windowWidth = newWidth;
-                    display = new JavaFXDisplayDriver(DEFAULT_SIZE, newWidth / 25, board);
-
-                    base.getChildren().clear();
-                    base.getChildren().add(new Group(display.getPane()));
+                    cellSizePx = newWidth / 25;
+                    createDisplay();
                 }
             }
         };
