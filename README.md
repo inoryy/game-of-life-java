@@ -35,7 +35,7 @@ To run unit tests, just execute `ant run`
 
 ## Credits
 
-This project was developed as part of OOP/Java class in University of Tartu by Mihkel Vaher and Roman Marintšenko.
+This project was developed as part of OOP/Java class in University of Tartu by Mihkel Vaher and Roman Ring.
 
 ## License
 
